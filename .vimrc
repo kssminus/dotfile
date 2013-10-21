@@ -1,27 +1,66 @@
-" Make Vim more useful
-"" 편집기능 설정
-colorscheme badwolf
-"" 편집기능 설정
+" Setting up Vundle - the vim plugin bundler
+    let iCanHazVundle=1
+    let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+    if !filereadable(vundle_readme)
+        echo "Installing Vundle.."
+        echo ""
+        silent !mkdir -p ~/.vim/bundle
+        silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+        let iCanHazVundle=0
+    endif
+    set rtp+=~/.vim/bundle/vundle/
+    call vundle#rc()
+    
+    Bundle 'gmarik/vundle'
+    
+    " Add your bundles here
+
+    "...All your other bundles...
+    Bundle 'badwolf'
+    colorscheme badwolf
+
+    Bundle 'The-NERD-tree'
+    map <F10> :NERDTreeToggle<CR>
+
+    " Programming
+    Bundle 'anzaika/go.vim'
+    Bundle 'jQuery'
+    Bundle 'tpope/vim-rails.git'
+    Bundle 'vim-ruby/vim-ruby'
+    Bundle 'AutoComplPop'
+  
+    " Syntax
+    Bundle 'Markdown'
+    Bundle 'cucumber.zip'
+    Bundle 'tpope/vim-fugitive'
+    
+    " utility
+    Bundle 'rstacruz/sparkup.git', {'rtp': 'vim/'} 
+
+    if iCanHazVundle == 0
+        echo "Installing Bundles, please ignore key map error messages"
+        echo ""
+        :BundleInstall
+    endif
+" Setting up Vundle - the vim plugin bundler end
+
+set nocompatible  " disable vi compatibility.
+set history=256  " Number of things to remember in history.
+set autowrite  " Writes on make/shell commands
+set autoread  
+set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
+" Backup
+set nowritebackup
+set nobackup
+
 set softtabstop=2
 set shiftwidth=2
-set backspace=indent,eol,start
 set ru
 set sc
-"set nu
-"set nuw=5
-"set backspace=2
 set autoindent
-"set nowrap
-"set noet
-"set sts=0
-"set magic
-set title
-"set linespace=100
-"set paste
 
-set nocompatible
 " Use the OS clipboard by default (on versions compiled with `+clipboard`)
-set clipboard=unnamed
+set clipboard+=unnamed
 " Enhance command-line completion
 set wildmenu
 " Allow cursor keys in insert mode
@@ -70,6 +109,8 @@ set hlsearch
 set ignorecase
 " Highlight dynamically as pattern is typed
 set incsearch
+" be sensitive when there's a capital letter
+set smartcase		
 " Always show status line
 set laststatus=2
 " Enable mouse in all modes
@@ -93,8 +134,6 @@ set showcmd
 " Start scrolling three lines before the horizontal window border
 set scrolloff=3
 
-
-" Strip trailing whitespace (,ss)
 function! StripWhitespace()
   let save_cursor = getpos(".")
   let old_query = getreg('/')
@@ -103,38 +142,10 @@ function! StripWhitespace()
   call setreg('/', old_query)
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
-" Save a file as root (,W)
-noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" tab
-" map <Char-27>j :tabp<CR>
-" map <Char-27>k :tabn<CR>
-" map <Tab> >>
-" vmap <Tab> >gv
-" vmap <S-Tab> <gv
 
-" Automatic commands
-if has("autocmd")
-  " Enable file type detection
-  filetype on
-  " Treat .json files as .js
-  autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
-  autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType c      set omnifunc=ccomplete#Complete
-  autocmd FileType css    set omnifunc=csscomplete#CompleteCSS
-  autocmd FileType html   set omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType php    set omnifunc=phpcomplete#CompletePHP
-  autocmd FileType python set omnifunc=pythoncomplete#Complete
-  autocmd FileType ruby   set omnifunc=rubycomplete#Complete
-  autocmd FileType sql    set omnifunc=sqlcomplete#Complete
-  autocmd FileType xml    set omnifunc=xmlcomplete#CompleteTags
-endif
-
-" NerdTree
 " Smart way to move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
-
-map <F10> :NERDTreeToggle<CR>
