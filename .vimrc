@@ -10,44 +10,72 @@
     endif
     set rtp+=~/.vim/bundle/vundle/
     call vundle#rc()
-    
-    Bundle 'gmarik/vundle'
-    
+
+    Plugin 'gmarik/vundle'
+
     " Add your bundles here
 
     "...All your other bundles...
-    Bundle 'badwolf'
+    Plugin 'flazz/vim-colorschemes'
     colorscheme badwolf
 
-    Bundle 'The-NERD-tree'
+    Plugin 'The-NERD-tree'
     map <F10> :NERDTreeToggle<CR>
 
     " Programming
-    Bundle 'anzaika/go.vim'
-    Bundle 'jQuery'
-    Bundle 'tpope/vim-rails.git'
-    Bundle 'vim-ruby/vim-ruby'
-    Bundle 'AutoComplPop'
-  
-    " Syntax
-    Bundle 'Markdown'
-    Bundle 'cucumber.zip'
-    Bundle 'tpope/vim-fugitive'
-    
-    " utility
-    Bundle 'rstacruz/sparkup.git', {'rtp': 'vim/'} 
+    Plugin 'anzaika/go.vim'
+    Plugin 'jQuery'
+    Plugin 'tpope/vim-rails.git'
+    Plugin 'vim-ruby/vim-ruby'
+    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'majutsushi/tagbar'
+    map <F10> :NERDTreeToggle<CR>
+    map <F8> :TagbarToggle<CR>
+    " Plugin 'AutoComplPop'
 
-    if iCanHazVundle == 0
-        echo "Installing Bundles, please ignore key map error messages"
-        echo ""
-        :BundleInstall
-    endif
+    " Syntax
+    Plugin 'Markdown'
+    Plugin 'cucumber.zip'
+    Plugin 'tpope/vim-fugitive'
+    Plugin 'vim-coffee-script'
+    Plugin 'scrooloose/syntastic'
+    Plugin 'tpope/vim-surround'
+    Plugin 'leafgarland/typescript-vim'
+
+    " utility
+    Plugin 'mileszs/ack.vim'
+    Plugin 'rstacruz/sparkup.git', {'rtp': 'vim/'}
+    Plugin 'easymotion/vim-easymotion'
+    Plugin 'c9s/helper.vim'¬
+    Plugin 'c9s/treemenu.vim'¬
+    Plugin 'c9s/vikube.vim'
+
 " Setting up Vundle - the vim plugin bundler end
+" syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_ignore_files = ['.*html']
+
+let g:typescript_indent_disable = 1
+
+silent! nmap <F6> :SyntasticToggleMode<CR>
+
+if has('termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 
 set nocompatible  " disable vi compatibility.
 set history=256  " Number of things to remember in history.
 set autowrite  " Writes on make/shell commands
-set autoread  
+set autoread
 set timeoutlen=250  " Time to wait after ESC (default causes an annoying delay)
 " Backup
 set nowritebackup
@@ -60,7 +88,7 @@ set sc
 set autoindent
 
 " Use the OS clipboard by default (on versions compiled with `+clipboard`)
-set clipboard+=unnamed
+set clipboard=unnamed
 " Enhance command-line completion
 set wildmenu
 " Allow cursor keys in insert mode
@@ -110,7 +138,7 @@ set ignorecase
 " Highlight dynamically as pattern is typed
 set incsearch
 " be sensitive when there's a capital letter
-set smartcase		
+set smartcase
 " Always show status line
 set laststatus=2
 " Enable mouse in all modes
@@ -130,6 +158,7 @@ set title
 " Show the (partial) command as it’s being typed
 set showcmd
 " Use relative line numbers
+set relativenumber
 
 " Start scrolling three lines before the horizontal window border
 set scrolloff=3
@@ -143,9 +172,34 @@ function! StripWhitespace()
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
+function! ReplaceTap()
+  :retab
+endfunction
+noremap <leader>tt :call ReplaceTap()<CR>
+
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set norelativenumber
+  else
+    set relativenumber
+  endif
+endfunc
+
+noremap <leader>nn :call NumberToggle()<CR>
+map <Leader> <Plug>(easymotion-prefix)
 
 " Smart way to move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+
+" syntastic related config
+" [buffer number] followed by filename:
+set statusline=[%n]\ %t
+" for Syntastic messages:
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+" show line#:column# on the right hand side
+set statusline+=%=%l:%c
